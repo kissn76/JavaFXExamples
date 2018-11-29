@@ -8,6 +8,8 @@ import java.util.Optional;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -16,6 +18,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -42,9 +45,9 @@ public class AlertExample extends Application {
 
         // Text field
         Label txtLbl = new Label("A Text field:");
-        textFld = new TextField();
-        textFld.setPromptText("Enter some text and save.");
+        textFld = new TextField("Enter some text and save.");
         HBox hbox = new HBox();
+        hbox.setAlignment(Pos.CENTER_LEFT);
         hbox.getChildren().addAll(txtLbl, textFld);
 
         // Buttons
@@ -58,23 +61,27 @@ public class AlertExample extends Application {
         confbtn.setOnAction(new ConfirmationButtonListener());
         Button nonebtn = new Button("None");
         nonebtn.setOnAction(new NoneButtonListener());
-        HBox buttonHb = new HBox(10);
+
+        HBox buttonHb = new HBox(6);
         buttonHb.getChildren().addAll(infobtn, warnbtn, errbtn, confbtn, nonebtn);
 
         // Status message text
         actionStatus = new Text();
 
         // Vbox
-        VBox vbox = new VBox(30);
+        VBox vbox = new VBox(24);
+        vbox.setPadding(new Insets(6));
         vbox.getChildren().addAll(labelHb, hbox, buttonHb, actionStatus);
 
         // Scene
         Scene scene = new Scene(vbox); // w x h
         primaryStage.setScene(scene);
+        primaryStage.setResizable(true);
         primaryStage.show();
 
         // Initial
         actionStatus.setText("An example of Alert Dialogs. Enter some text and save.");
+        primaryStage.sizeToScene();
         infobtn.requestFocus();
     }
 
@@ -92,6 +99,7 @@ public class AlertExample extends Application {
             s += "Alert types are: INFORMATION, CONFIRMATION, ERROR, NONE and WARNING.";
             alert.setContentText(s);
             alert.setResizable(true);
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 
             alert.show();
         }
@@ -111,6 +119,7 @@ public class AlertExample extends Application {
             s += "Alert types are: INFORMATION, CONFIRMATION, ERROR, NONE and WARNING.";
             alert.setContentText(s);
             alert.setResizable(true);
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 
             alert.show();
         }
@@ -133,6 +142,8 @@ public class AlertExample extends Application {
                 alert.setTitle(titleTxt);
                 String s = "Text should be at least 5 characters long. " + "Enter valid text and save. ";
                 alert.setContentText(s);
+                alert.setResizable(true);
+                alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                 alert.showAndWait();
                 msg = "Invalid text entered: ";
             }
@@ -157,6 +168,8 @@ public class AlertExample extends Application {
             alert.setTitle(titleTxt);
             String s = "Confirm to clear text in text field ! ";
             alert.setContentText(s);
+            alert.setResizable(true);
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 
             Optional<ButtonType> result = alert.showAndWait();
 
@@ -182,6 +195,19 @@ public class AlertExample extends Application {
             s += "Alert types are: INFORMATION, CONFIRMATION, ERROR, NONE and WARNING.";
             alert.setContentText(s);
             alert.setResizable(true);
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+
+            ButtonType buttonTypeOne = new ButtonType("One");
+            ButtonType buttonTypeTwo = new ButtonType("Two");
+            ButtonType buttonTypeThree = new ButtonType("Three");
+
+            alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree);
+
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent()) {
+                actionStatus.setText(result.get().getText());
+            }
 
             alert.show();
         }
