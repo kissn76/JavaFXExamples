@@ -59,11 +59,13 @@ public class AlertExample extends Application {
         errbtn.setOnAction(new ErrorButtonListener());
         Button confbtn = new Button("Confirmation");
         confbtn.setOnAction(new ConfirmationButtonListener());
+        Button conf2btn = new Button("Confirmation2");
+        conf2btn.setOnAction(new Confirmation2ButtonListener());
         Button nonebtn = new Button("None");
         nonebtn.setOnAction(new NoneButtonListener());
 
         HBox buttonHb = new HBox(6);
-        buttonHb.getChildren().addAll(infobtn, warnbtn, errbtn, confbtn, nonebtn);
+        buttonHb.getChildren().addAll(infobtn, warnbtn, errbtn, confbtn, conf2btn, nonebtn);
 
         // Status message text
         actionStatus = new Text();
@@ -151,7 +153,6 @@ public class AlertExample extends Application {
             actionStatus.setText(msg + txt);
 
             if (!valid) {
-
                 textFld.requestFocus();
             }
         }
@@ -177,6 +178,34 @@ public class AlertExample extends Application {
                 textFld.setText("");
                 actionStatus.setText("An example of Alert Dialogs. Enter some text and save.");
                 textFld.requestFocus();
+            }
+        }
+    }
+
+    private class Confirmation2ButtonListener implements EventHandler<ActionEvent> {
+
+        @Override
+        public void handle(ActionEvent e) {
+
+            // Show confirm alert dialog
+
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle(titleTxt);
+            String s = "Confirm to clear text in text field ! ";
+            alert.setContentText(s);
+            alert.setResizable(true);
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+
+            ButtonType buttonTypeOne = new ButtonType("One");
+            ButtonType buttonTypeTwo = new ButtonType("Two");
+            ButtonType buttonTypeThree = new ButtonType("Three");
+
+            alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree);
+
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent()) {
+                actionStatus.setText(result.get().getText());
             }
         }
     }
